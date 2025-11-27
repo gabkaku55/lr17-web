@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="style.css">
 <h1>Список студентів</h1>
 <table border="1" cellpadding="8">
     <tr>
@@ -8,16 +9,18 @@
         <th>Email</th>
         <th>Дії</th>
     </tr>
-    <?php foreach ($students as $st): ?>
+    <?php foreach ($students as $student): ?>
         <tr>
-            <td><?= $st->id ?></td>
-            <td><?= $st->full_name ?></td>
-            <td><?= $st->grade ?></td>
-            <td><?= $st->phone ?></td>
-            <td><?= $st->email ?></td>
+            <td><?= htmlspecialchars($student->id) ?></td>
+            <td><?= htmlspecialchars($student->full_name) ?></td>
+            <td><?= htmlspecialchars($student->grade) ?></td>
+            <td><?= htmlspecialchars($student->phone) ?></td>
+            <td><?= htmlspecialchars($student->email) ?></td>
             <td>
-                <a href="index.php?action=edit&id=<?= $st->id ?>">Редагувати</a> |
-                <a href="index.php?action=delete&id=<?= $st->id ?>">Видалити</a>
+            <div class="action-buttons">
+            <a class="edit-btn" href="index.php?action=edit&id=<?= $student->id ?>">Редагувати</a>
+            <a class="delete-btn" href="index.php?action=delete&id=<?= $student->id ?>">Видалити</a>
+            </div>
             </td>
         </tr>
     <?php endforeach; ?>

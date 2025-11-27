@@ -1,37 +1,47 @@
 <?php
-require_once "models/Student.php";
+require_once __DIR__ . '/../models/Student.php';
 class StudentController
 {
     public static function index($pdo)
     {
         $students = Student::all($pdo);
-        include "views/list.php";
+        include __DIR__ . '/../views/list.php';
     }
     public static function edit($pdo, $id)
     {
         $student = Student::find($pdo, $id);
-        include "views/edit.php";
+        include __DIR__ . '/../views/edit.php';
     }
     public static function update($pdo)
     {
         $st = Student::find($pdo, $_POST['id']);
-        $st->full_name = $_POST['full_name'];
-        $st->grade = $_POST['grade'];
-        $st->phone = $_POST['phone'];
-        $st->email = $_POST['email'];
-        $st->update();
+        $dataToUpdate = [
+            'full_name' => $_POST['full_name'],
+            'grade' => $_POST['grade'],
+            'phone' => $_POST['phone'],
+            'email' => $_POST['email']
+        ];
+        foreach ($dataToUpdate as $key => $value)
+             {
+            $st->$key = $value;
+        }
+        $st->update($dataToUpdate);
 
         header("Location: index.php");
+        exit;
     }
     public static function deleteConfirm($pdo, $id)
     {
         $student = Student::find($pdo, $id);
-        include "views/delete.php";
+        include __DIR__ . '/../views/delete.php';
     }
     public static function delete($pdo)
     {
         $student = Student::find($pdo, $_POST['id']);
-        $student->delete();
+        if ($student) {
+            $student->delete();
+        }
         header("Location: index.php");
+        exit;
     }
 }
