@@ -132,4 +132,24 @@ class Model
         $stmt->bindValue(':id', $this->attributes['id']);
         return $stmt->execute();
     }
+ public function hasMany($className, $foreignKey)
+{
+    $sql = "SELECT * FROM " . $className::$table . " WHERE `$foreignKey` = :id";
+    $stmt = static::$pdo->prepare($sql);
+    $stmt->bindValue(':id', $this->attributes['id']);
+    $stmt->execute();
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $models = [];
+    foreach ($rows as $row) {
+        $model = new $className(static::$pdo, $className::$table);
+        foreach ($row as $key => $value) {
+            $model->$key = $value;
+        }
+        $models[] = $model;
+    }
+
+    return $models;
+}
+
 }
